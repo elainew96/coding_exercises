@@ -45,6 +45,43 @@ def areas(populations,total):
             else:
                 return areas(populations[1:],total)
 
+'''
+all_areas finds a unique solution for each subarray its given. However, it does
+not find all of the areas if there are multiple solutions that use the same
+first areas but different areas later.
+
+example:
+pop = [4, 2, 6, 2, 1, 5, 1], total = 10
+
+The possible solutions are:
+[4,2,2,1,1]
+[2,6,2,1,1]
+[6,2,1,1]
+[4,6]
+[2,2,1,5]
+[2,2,5,1]
+
+However, it does not find the last 3 solutions due to finding new populations.
+This may be fixed by adding another parameter into the area function to check
+for more solutions.
+'''
+def all_areas(population,total):
+    result = []
+    current = areas(population,total)
+    splice = 1
+    while (current!=None):
+        result.append(current)
+        next_total = areas(population[splice:],total)
+        while (current == next_total):
+            splice += 1
+            next_pop = population[splice:]
+            next_total = areas(next_pop,total)
+        current = next_total
+
+    return result
+
+
+
 
 population = [18897109, 12828837, 9461105, 6371773, 5965343, 5946800, 5582170,
 5564635, 5268860, 4552402, 4335391, 4296250, 4224851, 4192887, 3439809, 3279833,
@@ -55,3 +92,11 @@ total = 100000000
 a = areas(population,total)
 print a
 print sum(a)
+
+pop = [4, 2, 6, 2, 1, 5, 1]
+b = areas(pop,10)
+c = all_areas(pop,10)
+print b
+print c
+for ans in c:
+    print ans
